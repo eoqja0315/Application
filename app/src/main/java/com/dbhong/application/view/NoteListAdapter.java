@@ -44,6 +44,18 @@ public class NoteListAdapter extends BaseAdapter {
         mFieldId = textViewResourceId;
     }
 
+    public void addAll(ArrayList<NoteData> noteDataArrayList)
+    {
+        this.mNoteDataArrayList = noteDataArrayList;
+        notifyDataSetChanged();
+    }
+
+    public void add(NoteData noteData)
+    {
+        this.mNoteDataArrayList.add(noteData);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         if(mNoteDataArrayList != null)
