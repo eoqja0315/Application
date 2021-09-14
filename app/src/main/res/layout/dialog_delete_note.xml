@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/delete_note_dialog_information"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_margin="50dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonDeleteNoteCancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bt_delete_note"
+            android:text="@string/cancle"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_margin="5dp"
+            />
+
+        <Button
+            android:id="@+id/buttonDeleteNoteConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bt_delete_note"
+            android:layout_weight="1"
+            android:text="@string/confrim"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_margin="5dp"/>
+    </LinearLayout>
+
+
+</LinearLayout>

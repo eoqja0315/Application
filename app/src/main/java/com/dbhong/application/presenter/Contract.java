@@ -1,21 +1,28 @@
 package com.dbhong.application.presenter;
 
+import android.content.Context;
+import android.provider.ContactsContract;
+
 import com.dbhong.application.model.NoteData;
+import com.dbhong.application.model.NoteDataList;
+
+import java.util.ArrayList;
 
 public interface Contract {
 
-    interface View {
-        public void showNoteName(int position);
+    interface MainActivtyView {
+
     }
 
-    interface Presenter {
-        public void addNoteName(String noteName);
-        public void addData(String data);
+    interface NoteDataListPresenter {
+        public void addNoteData(NoteData noteData);
 
-        public void setNoteName(String noteName);
-        public void setData(String data);
-        public void setDate(String date);
+        public void saveNoteDataListInDataBase(Context context);
+        public int loadNoteDataListInDataBase(Context context);
 
-        public NoteData getNoteData();
+        public void removeNoteData(int position);
+
+        public NoteData getNoteData(int position);
+        public NoteDataList getNoteDataList();
     }
 }

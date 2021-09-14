@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_remove"
-        android:title="@string/main_action_menu_delete"
+        android:id="@+id/action_sharing"
+        android:title="@string/edit_note_action_menu_sharing"
         app:showAsAction="ifRoom"/>
 
 </menu>

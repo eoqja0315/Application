@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">NoteApp</string>
+
+    <string name="edit_note_action_menu_sharing">공유하기</string>
+    <string name="main_action_menu_delete">삭제</string>
+
+    <string name="edit_note_titleTv">제목</string>
+    <string name="edit_note_title_et_hint_string">제목을 입력하세요.</string>
+    <string name="edit_note_contents_et_hint_string">내용을 입력하세요.</string>
+
+    <string name="edit_note_save_button_string">저장</string>
+    <string name="edit_note_cancle_button_string">취소</string>
+
+    <string name="edit_note_toolbar_title">노트 편집</string>
+
+
+    <string name="note_recycler_textview_note_title">노트 제목 : </string>
+    <string name="note_recycler_textview_note_create_date">생성 날짜 : </string>
+
+    <string name="delete_note_dialog_title">노트 삭제</string>
+    <string name="delete_note_dialog_information">노트를 삭제하시겠습니까?</string>
+
+    <string name="cancle">취소</string>
+    <string name="confrim">확인</string>
 </resources>

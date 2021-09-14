@@ -2,51 +2,68 @@ package com.dbhong.application.model;
 
 import com.dbhong.application.presenter.Contract;
 
+import java.util.ArrayList;
+
 public class NoteData {
 
-    Contract.Presenter presenter;
+    private String mCreateDate;
+    private String mLastEditDate;
+    private String mNoteTitle;
+    private String mContent;
 
-    static private int count;
-
-    private String mDate;
-    private String mNoteName;
-    private String mData;
-    private int mNoteNum;
-
-    public NoteData(Contract.Presenter presenter) {
-        this(presenter, "", "", "");
+    public NoteData() {
+        this( "", "", "");
     }
 
-    public NoteData(Contract.Presenter presenter, String date, String noteName, String data) {
-        this.presenter = presenter;
-        this.mDate = date;
-        this.mNoteName = noteName;
-        this.mData = data;
-        this.mNoteNum = count++;
+    public NoteData(String createDate) {
+        this(createDate, "", "", "");
     }
 
-    public String getDate() {
-        return mDate;
+    public NoteData(String createDate, String noteTitle) {
+        this(createDate, noteTitle, "", "");
     }
 
-    public String getNoteName() {
-        return mNoteName;
+    public NoteData(String createDate, String noteTitle, String content) {
+        this(createDate, noteTitle, content, "");
     }
 
-    public String getData() {
-        return mData;
+    public NoteData(String createDate, String noteTitle, String content, String lastEditDate) {
+        this.mCreateDate = createDate;
+        this.mNoteTitle = noteTitle;
+        this.mContent = content;
+        this.mLastEditDate = lastEditDate;
     }
 
-    public void setDate(String date) {
-        this.mDate = date;
+    public String getCreateDate() {
+        return mCreateDate;
     }
 
-    public void setNoteName(String noteName) {
-        this.mNoteName = noteName;
+    public String getLastEditDate() {
+        return mLastEditDate;
     }
 
-    public void setData(String data) {
-        this.mData = data;
+    public String getNoteTitle() {
+        return mNoteTitle;
+    }
+
+    public String getContent() {
+        return mContent;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.mCreateDate = createDate;
+    }
+
+    public void setLastEdtiDate(String lastEditDate) {
+        this.mLastEditDate = lastEditDate;
+    }
+
+    public void setNoteTitle(String noteTitle) {
+        this.mNoteTitle = noteTitle;
+    }
+
+    public void setContent(String content) {
+        this.mContent = content;
     }
 
 }
