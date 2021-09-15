@@ -1,6 +1,5 @@
 package com.dbhong.application.view.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,32 +7,27 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dbhong.application.Utility.Utility;
-import com.dbhong.application.model.NoteData;
 import com.dbhong.application.presenter.NoteDataListPresenter;
 import com.dbhong.application.view.Activity.EditNoteActivity;
 import com.dbhong.application.view.Activity.MainActivity;
-import com.dbhong.application.view.Dialog.NoteDeleteDialog;
-import com.dbhong.application.view.Dialog.NoteDeleteDialogListener;
-import com.dbhong.application.R;
 
-import java.util.List;
+import com.dbhong.application.R;
 
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHolder> {
 
@@ -75,7 +69,9 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
         TextView textViewNoteCreateDate;
         TextView textViewNoteContent;
         LinearLayout layoutRecyclerBackground;
+        LinearLayout layoutRecyclerItemDisplay;
         CheckBox checkboxSelect;
+        Animation moveRightAnim;
         ViewHolder(View itemView) {
             super(itemView);
 
@@ -84,7 +80,8 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
             textViewNoteContent = itemView.findViewById(R.id.textViewNoteContent);
             layoutRecyclerBackground = itemView.findViewById(R.id.layoutRecyclerBackground);
             checkboxSelect = itemView.findViewById(R.id.checkBoxSelect);
-
+            layoutRecyclerItemDisplay = itemView.findViewById(R.id.layoutRecyclerItemDisplay);
+            moveRightAnim = AnimationUtils.loadAnimation(mContext, R.anim.note_recycler_move_right);
         }
     }
 
@@ -107,17 +104,17 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
     public void onBindViewHolder(NoteListAdapter.ViewHolder holder, int position) {
         Log.d(TAG, "onBindView begin");
 
-        holder.textViewNoteTitle.setText(mPresenter.getNoteData(position).getNoteTitle());
-        holder.textViewNoteCreateDate.setText(mPresenter.getNoteData(position).getCreateDate());
-        holder.textViewNoteContent.setText(mPresenter.getNoteData(position).getContent());
+        holder.textViewNoteTitle.setText(mPresenter.getNoteTitle(position));
+        holder.textViewNoteCreateDate.setText(mPresenter.getCreateDate(position));
+        holder.textViewNoteContent.setText(mPresenter.getContent(position));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(holder.itemView.getContext(), EditNoteActivity.class);
-                intent.putExtra("title", mPresenter.getNoteData(holder.getAdapterPosition()).getNoteTitle());
-                intent.putExtra("content", mPresenter.getNoteData(holder.getAdapterPosition()).getContent());
-                intent.putExtra("position", holder.getAdapterPosition());
+                intent.putExtra("title", mPresenter.getNoteData(position).getNoteTitle());
+                intent.putExtra("content", mPresenter.getNoteData(position).getContent());
+                intent.putExtra("position", position);
 
                 ((MainActivity) mContext).startActivityResult.launch(intent);
             }
@@ -129,10 +126,15 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
 
                 Drawable drawable = holder.itemView.getResources().getDrawable(R.color.colorPrimary);
                 holder.layoutRecyclerBackground.setBackground(drawable);
-
                 holder.checkboxSelect.setVisibility(View.VISIBLE);
                 holder.checkboxSelect.setChecked(true);
+                holder.layoutRecyclerItemDisplay.setAnimation(holder.moveRightAnim);
 
+                Toolbar mainToolbar = ((MainActivity) mContext).findViewById(R.id.mainToolbar);
+                MenuInflater menuInflater = ((MainActivity) mContext).getMenuInflater();
+                menuInflater.inflate(R.menu.main_actionbar_action, mainToolbar.getMenu());
+
+                clickAdapterCallback.longClickCallBack(position);
                 return true;
             }
         });

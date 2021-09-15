@@ -79,4 +79,65 @@ public class NoteDataListPresenter implements Contract.NoteDataListPresenter {
     {
         return mNoteDataList.loadNoteDataListInDataBase(context);
     }
+
+    @Override
+    public void setCreateDate(String createDate, int position)
+    {
+        mNoteDataList.get(position).setCreateDate(createDate);
+    }
+
+    @Override
+    public String getCreateDate(int position)
+    {
+        return mNoteDataList.get(position).getCreateDate();
+    }
+
+    @Override
+    public void setNoteTitle(String noteTitle, int position)
+    {
+        mNoteDataList.get(position).setNoteTitle(noteTitle);
+    }
+
+    @Override
+    public String getNoteTitle(int position)
+    {
+        return mNoteDataList.get(position).getNoteTitle();
+    }
+
+    @Override
+    public void setContent(String content, int position)
+    {
+        mNoteDataList.get(position).setContent(content);
+    }
+
+    @Override
+    public String getContent(int position)
+    {
+        return mNoteDataList.get(position).getContent();
+    }
+
+    @Override
+    public void setLastEditDate(String lastEditDate , int position)
+    {
+        mNoteDataList.get(position).setLastEdtiDate(lastEditDate);
+    }
+
+    @Override
+    public String getLastEditDate(int position)
+    {
+        return mNoteDataList.get(position).getLastEditDate();
+    }
+
+    @Override
+    public void setIsChecked(boolean isChecked, int position)
+    {
+        mNoteDataList.get(position).setIsChecked(isChecked);
+    }
+
+    @Override
+    public boolean getIsChecked(int position)
+    {
+        return mNoteDataList.get(position).getIsChecked();
+    }
+
 }

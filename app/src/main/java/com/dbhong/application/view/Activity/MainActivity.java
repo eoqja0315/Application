@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -35,6 +36,8 @@ import com.dbhong.application.view.Adapter.NoteListAdapter;
 import com.dbhong.application.view.Dialog.NoteDeleteDialog;
 import com.dbhong.application.view.Dialog.NoteDeleteDialogListener;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity implements Contract.MainActivtyView{
 
@@ -49,6 +52,18 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
 
     ImageButton imageButtonCreateNote;
 
+    private ClickAdapterCallback clickAdapterCallback = new ClickAdapterCallback() {
+        @Override
+        public void callback(int position) {
+
+        }
+
+        @Override
+        public void longClickCallBack(int position) {
+            mPresenter.setIsChecked(!mPresenter.getIsChecked(position), position);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
         noteListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mAdapter = new NoteListAdapter(this, R.layout.activity_main , mPresenter);
+        mAdapter.setClickAdapterCallback(clickAdapterCallback);
 
         noteListRecyclerView.setAdapter(mAdapter);
 
@@ -90,12 +106,6 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
             mAdapter.notifyDataSetChanged();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main_actionbar_action, menu);
-//
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -109,12 +119,22 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
                     public void onPositiveClicked() {
 
                         Toast.makeText(getApplicationContext(), "Positive Clicked", Toast.LENGTH_SHORT).show();
+
+                        for(int i = 0; i < mAdapter.getItemCount(); i++)
+                        {
+                            if(mPresenter.getIsChecked(i))
+                            {
+                                mPresenter.removeNoteData(i--);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        MenuInflater menuInflater = getMenuInflater();
+                        menuInflater.inflate(R.menu.main_actionbar_action_default, toolbar.getMenu());
                     }
 
                     @Override
                     public void onNegativeClicked() {
-
-                        Toast.makeText(getApplicationContext(), "Negative Clicked", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -145,8 +165,8 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
                             mPresenter.addNoteData(new NoteData(Utility.getCurrenTime(), bundle.getString("title"), bundle.getString("content")));
                         else
                         {
-                            mPresenter.getNoteData(position).setNoteTitle(bundle.getString("title"));
-                            mPresenter.getNoteData(position).setContent(bundle.getString("content"));
+                            mPresenter.setNoteTitle(bundle.getString("title"), position);
+                            mPresenter.setContent(bundle.getString("content"), position);
                             mAdapter.notifyDataSetChanged();
                         }
                     }
@@ -161,4 +181,6 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
         super.onDestroy();
         mPresenter.saveNoteDataListInDataBase(this);
     }
+
+
 }
