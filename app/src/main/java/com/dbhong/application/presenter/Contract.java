@@ -5,12 +5,18 @@ import android.provider.ContactsContract;
 
 import com.dbhong.application.model.NoteData;
 import com.dbhong.application.model.NoteDataList;
+import com.dbhong.application.view.Adapter.NoteListAdapter;
 
 import java.util.ArrayList;
 
 public interface Contract {
 
     interface MainActivtyView {
+        public void setVisibleNoteListRecyclerCheckBox(NoteListAdapter.ViewHolder viewHolder, int visible);
+        public void setVisibleNoteListRecyclerAllCheckBox(int visible);
+
+        public void setCheckedNoteListRecyclerCheckBox(NoteListAdapter.ViewHolder viewHolder, boolean isChecked);
+        public void setCheckedNoteListRecyclerAllCheckBox(boolean isChecked);
 
     }
 
@@ -37,7 +43,9 @@ public interface Contract {
         public void setIsChecked(boolean isChecked, int position);
         public boolean getIsChecked(int position);
 
-        public NoteData getNoteData(int position);
-        public NoteDataList getNoteDataList();
+        public int getChekedItemNum();
+        public int getNonTitledItemNum();
+
+        public int getItemCount();
     }
 }

@@ -5,6 +5,20 @@
     <item
         android:id="@+id/action_remove"
         android:title="@string/main_action_menu_delete"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="collapseActionView"/>
 
+    <item
+        android:id="@+id/action_copy"
+        android:title="@string/main_action_menu_copy"
+        app:showAsAction="collapseActionView"/>
+
+    <item
+        android:id="@+id/action_cancle"
+        android:title="@string/main_action_menu_cancle"
+        app:showAsAction="collapseActionView"/>
+
+    <item
+        android:id="@+id/action_select_all"
+        android:title="@string/main_action_menu_select_all"
+        app:showAsAction="collapseActionView"/>
 </menu>

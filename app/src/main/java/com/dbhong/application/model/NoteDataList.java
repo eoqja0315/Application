@@ -24,6 +24,30 @@ public class NoteDataList extends ArrayList<NoteData> {
         this.presenter = presenter;
     }
 
+    public int getCheckedItemNum()
+    {
+        int cnt = 0;
+
+        for(int i = 0; i < size(); i++) {
+            if (get(i).getIsChecked()) cnt++;
+        }
+
+        return cnt;
+    }
+
+    public int getNonTitledItemNum()
+    {
+        int cnt = 0;
+
+        for(int i = 0; i < size(); i++){
+            if(get(i).getNoteTitle().contains("제목 없음"))
+            {
+                cnt++;
+            }
+        }
+
+        return cnt;
+    }
     public void saveNoteDataListInDataBase(Context context)
     {
         DataBaseHelper dbHelper = new DataBaseHelper(context, DataBaseContract.NoteDataEntry.TABLE_NAME, 1);

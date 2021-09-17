@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 
+import androidx.appcompat.widget.MenuPopupWindow;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,7 +73,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
         LinearLayout layoutRecyclerBackground;
         LinearLayout layoutRecyclerItemDisplay;
         CheckBox checkboxSelect;
-        Animation moveRightAnim;
+
         ViewHolder(View itemView) {
             super(itemView);
 
@@ -81,7 +83,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
             layoutRecyclerBackground = itemView.findViewById(R.id.layoutRecyclerBackground);
             checkboxSelect = itemView.findViewById(R.id.checkBoxSelect);
             layoutRecyclerItemDisplay = itemView.findViewById(R.id.layoutRecyclerItemDisplay);
-            moveRightAnim = AnimationUtils.loadAnimation(mContext, R.anim.note_recycler_move_right);
+
         }
     }
 
@@ -111,29 +113,13 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(holder.itemView.getContext(), EditNoteActivity.class);
-                intent.putExtra("title", mPresenter.getNoteData(position).getNoteTitle());
-                intent.putExtra("content", mPresenter.getNoteData(position).getContent());
-                intent.putExtra("position", position);
-
-                ((MainActivity) mContext).startActivityResult.launch(intent);
+                clickAdapterCallback.callback(position);
             }
         });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
-                Drawable drawable = holder.itemView.getResources().getDrawable(R.color.colorPrimary);
-                holder.layoutRecyclerBackground.setBackground(drawable);
-                holder.checkboxSelect.setVisibility(View.VISIBLE);
-                holder.checkboxSelect.setChecked(true);
-                holder.layoutRecyclerItemDisplay.setAnimation(holder.moveRightAnim);
-
-                Toolbar mainToolbar = ((MainActivity) mContext).findViewById(R.id.mainToolbar);
-                MenuInflater menuInflater = ((MainActivity) mContext).getMenuInflater();
-                menuInflater.inflate(R.menu.main_actionbar_action, mainToolbar.getMenu());
-
                 clickAdapterCallback.longClickCallBack(position);
                 return true;
             }
@@ -144,7 +130,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return mPresenter.getNoteDataList().size();
+        return mPresenter.getItemCount();
     }
 
     public void setClickAdapterCallback(ClickAdapterCallback clickAdapterCallback)

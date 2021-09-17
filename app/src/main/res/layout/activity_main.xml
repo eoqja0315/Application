@@ -5,14 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.Activity.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/black">
 
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mainToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
+        android:background="@color/black"
+        app:titleTextColor="@color/white"
+        >
 
     </androidx.appcompat.widget.Toolbar>
 

@@ -7,6 +7,7 @@ import android.provider.ContactsContract;
 
 import androidx.core.content.ContextCompat;
 
+import com.dbhong.application.R;
 import com.dbhong.application.database.DataBaseContract;
 import com.dbhong.application.database.DataBaseHelper;
 import com.dbhong.application.model.NoteData;
@@ -39,11 +40,6 @@ public class NoteDataListPresenter implements Contract.NoteDataListPresenter {
     }
 
     @Override
-    public NoteData getNoteData(int position) {
-        return mNoteDataList.get(position);
-    }
-
-    @Override
     public void addNoteData(NoteData noteData)
     {
         try {
@@ -52,7 +48,7 @@ public class NoteDataListPresenter implements Contract.NoteDataListPresenter {
 
             if(noteData.getNoteTitle().equals(""))
             {
-                noteData.setNoteTitle("제목 없음 " + (mNoteDataList.size() + 1));
+                noteData.setNoteTitle( "제목 없음 " + (mNoteDataList.size() + 1));
             }
 
             mNoteDataList.add(noteData);
@@ -60,12 +56,6 @@ public class NoteDataListPresenter implements Contract.NoteDataListPresenter {
         {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public NoteDataList getNoteDataList()
-    {
-        return mNoteDataList;
     }
 
     @Override
@@ -140,4 +130,21 @@ public class NoteDataListPresenter implements Contract.NoteDataListPresenter {
         return mNoteDataList.get(position).getIsChecked();
     }
 
+    @Override
+    public int getChekedItemNum()
+    {
+        return mNoteDataList.getCheckedItemNum();
+    }
+
+    @Override
+    public int getNonTitledItemNum()
+    {
+        return mNoteDataList.getNonTitledItemNum();
+    }
+
+    @Override
+    public int getItemCount()
+    {
+        return mNoteDataList.size();
+    }
 }
