@@ -20,5 +20,6 @@
     <item
         android:id="@+id/action_select_all"
         android:title="@string/main_action_menu_select_all"
-        app:showAsAction="collapseActionView"/>
+        android:icon="@drawable/note_list_round_checkbox"
+        app:showAsAction="ifRoom"/>
 </menu>

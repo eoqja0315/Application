@@ -12,16 +12,17 @@ import com.dbhong.application.database.DataBaseContract;
 import com.dbhong.application.database.DataBaseHelper;
 import com.dbhong.application.presenter.Contract;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteDataList extends ArrayList<NoteData> {
 
-    private Contract.NoteDataListPresenter presenter;
+    private Contract.MainActivityPresenter mainActivityPresenter;
 
-    public NoteDataList(Contract.NoteDataListPresenter presenter)
+    public NoteDataList(Contract.MainActivityPresenter presenter)
     {
-        this.presenter = presenter;
+        this.mainActivityPresenter = presenter;
     }
 
     public int getCheckedItemNum()

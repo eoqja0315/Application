@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="false">
+        <layer-list>
+            <item>
+                <shape>
+                    <stroke android:color="@color/white" android:width="1dp"/>
+                    <solid android:color="@color/black"/>
+                    <corners android:radius="50dp"/>
+                </shape>
+            </item>
+            <item android:drawable="@drawable/baseline_check_circle_outline_black_24"/>
+        </layer-list>
+    </item>
+
+    <item android:state_checked="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <corners android:radius="100dp"/>
+                    <solid android:color="#e14f50"/>
+                </shape>
+            </item>
+            <item android:drawable="@drawable/baseline_done_white_36" android:top="3dp" android:right="3dp" android:bottom="3dp" android:left="3dp"/>
+        </layer-list>
+    </item>
+</selector>

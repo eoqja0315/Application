@@ -1,33 +1,19 @@
 package com.dbhong.application.view.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.util.Log;
-import android.util.Size;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 
-import androidx.appcompat.widget.MenuPopupWindow;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dbhong.application.presenter.NoteDataListPresenter;
-import com.dbhong.application.view.Activity.EditNoteActivity;
-import com.dbhong.application.view.Activity.MainActivity;
+import com.dbhong.application.presenter.MainActivityPresenter;
 
 import com.dbhong.application.R;
 
@@ -35,7 +21,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
 
     public static final String TAG = "NoteListAdapter";
 
-    private NoteDataListPresenter mPresenter;
+    private MainActivityPresenter mPresenter;
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -44,19 +30,17 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
     private final int mResource;
     private int mDropDownResource;
 
-    private ClickAdapterCallback clickAdapterCallback;
-
-    public NoteListAdapter( Context context, @LayoutRes int resource, NoteDataListPresenter objects) {
+    public NoteListAdapter( Context context, @LayoutRes int resource, MainActivityPresenter objects) {
         this(context, resource, 0, objects);
     }
 
     public NoteListAdapter( Context context, @LayoutRes int resource,
-                        @IdRes int textViewResourceId, NoteDataListPresenter objects) {
+                        @IdRes int textViewResourceId, MainActivityPresenter objects) {
         this(context, resource, textViewResourceId, objects, false);
     }
 
     private NoteListAdapter(Context context, @LayoutRes int resource,
-                         @IdRes int textViewResourceId, NoteDataListPresenter presenter, boolean objsFromResources) {
+                            @IdRes int textViewResourceId, MainActivityPresenter presenter, boolean objsFromResources) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mResource = mDropDownResource = resource;
@@ -113,14 +97,14 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickAdapterCallback.callback(position);
+                mPresenter.setViewNoteListClickEvent(position);
             }
         });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                clickAdapterCallback.longClickCallBack(position);
+                mPresenter.setViewNoteListLongClickEvent(position);
                 return true;
             }
         });
@@ -133,8 +117,4 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
         return mPresenter.getItemCount();
     }
 
-    public void setClickAdapterCallback(ClickAdapterCallback clickAdapterCallback)
-    {
-        this.clickAdapterCallback = clickAdapterCallback;
-    }
 }

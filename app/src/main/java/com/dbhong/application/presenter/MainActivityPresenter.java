@@ -4,31 +4,32 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.ContactsContract;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dbhong.application.R;
 import com.dbhong.application.database.DataBaseContract;
 import com.dbhong.application.database.DataBaseHelper;
 import com.dbhong.application.model.NoteData;
 import com.dbhong.application.model.NoteDataList;
+import com.dbhong.application.view.Adapter.NoteListAdapter;
 
 import java.lang.annotation.Native;
 import java.util.ArrayList;
 
-public class NoteDataListPresenter implements Contract.NoteDataListPresenter {
+public class MainActivityPresenter implements Contract.MainActivityPresenter {
 
     private Contract.MainActivtyView view;
-    private NoteDataList mNoteDataList = null;
+    protected static NoteDataList mNoteDataList = null;
 
-    public NoteDataListPresenter(Contract.MainActivtyView view)
+    public MainActivityPresenter(Contract.MainActivtyView view)
     {
         mNoteDataList = new NoteDataList(this);
-        this.view = view;
-    }
-
-    public NoteDataListPresenter(Contract.MainActivtyView view, NoteDataList noteDataList) {
-        mNoteDataList = noteDataList;
         this.view = view;
     }
 
@@ -146,5 +147,57 @@ public class NoteDataListPresenter implements Contract.NoteDataListPresenter {
     public int getItemCount()
     {
         return mNoteDataList.size();
+    }
+
+    @Override
+    public NoteDataList getNoteDataList() {
+        return mNoteDataList;
+    }
+
+    @Override
+    public void setViewNoteListLongClickEvent(int position) {
+        setIsChecked(!getIsChecked(position), position);
+        view.setViewNoteListLongClickEvent(position);
+    }
+
+    @Override
+    public void setViewNoteListClickEvent(int position) {
+
+        int checkedItemNumbeforeCheck = getChekedItemNum();
+        setIsChecked(!getIsChecked(position), position);
+
+        view.setViewNoteListClickEvent(position, checkedItemNumbeforeCheck);
+
+    }
+
+    public boolean toolbarActionRemove()
+    {
+
+        return view.toolbarActionRemove();
+    }
+
+    public boolean toolBarActionCancle()
+    {
+        for(int i = 0; i < mNoteDataList.size(); i++)
+        {
+            mNoteDataList.get(i).setIsChecked(false);
+        }
+
+        return view.toolBarActionCancle();
+    }
+
+    public boolean toolBarActionCopy()
+    {
+        return view.toolBarActionCopy();
+    }
+
+    public boolean toolBarActionSelectAll()
+    {
+        for(int i = 0; i < mNoteDataList.size(); i++)
+        {
+            mNoteDataList.get(i).setIsChecked(true);
+        }
+
+        return view.toolBarActionSelectAll();
     }
 }
