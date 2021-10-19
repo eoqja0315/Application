@@ -22,7 +22,10 @@ public interface Contract {
         public boolean toolbarActionRemove();
         public boolean toolBarActionCancle();
         public boolean toolBarActionCopy();
-        public boolean toolBarActionSelectAll();
+        public boolean toolBarActionSelectAll(boolean isChecked);
+
+        public void noteDeleteDialogPositiveClicked();
+        public void noteDeleteDialogNegativeClicked();
     }
 
     interface MainActivityPresenter {
@@ -53,15 +56,25 @@ public interface Contract {
 
         public int getItemCount();
 
-        public NoteDataList getNoteDataList();
-
         public void setViewNoteListLongClickEvent(int position);
         public void setViewNoteListClickEvent(int position);
-        public boolean toolbarActionRemove();
+        public boolean toolbarActionRemove(boolean isPositive);
         public boolean toolBarActionCancle();
         public boolean toolBarActionCopy();
         public boolean toolBarActionSelectAll();
 
+        public void noteDeleteDialogPositiveClicked();
+        public void noteDeleteDialogNegativeClicked();
+    }
+
+    interface NoteDeleteDialogView {
+        public void onPositive();
+        public void onNegative();
+    }
+
+    interface NoteDeleteDialogPresenter {
+        public void onPositive();
+        public void onNegative();
     }
 
     interface EditNoteActivityView {

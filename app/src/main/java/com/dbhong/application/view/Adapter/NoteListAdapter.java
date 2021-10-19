@@ -13,6 +13,7 @@ import androidx.annotation.LayoutRes;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dbhong.application.model.NoteDataList;
 import com.dbhong.application.presenter.MainActivityPresenter;
 
 import com.dbhong.application.R;
@@ -114,7 +115,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return mPresenter.getItemCount();
+        if(NoteDataList.getInstance() != null)
+            return NoteDataList.getInstance().size();
+
+        return 0;
     }
 
 }

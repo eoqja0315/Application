@@ -30,11 +30,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.e(TAG, "++ onCreate() ++");
         db.execSQL(SqlHelper.getSqlCreateNoteDataEntries());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.e(TAG, "++ onUpgrade() execSQL : " + SqlHelper.getSqlDeleteNoteDataEntries());
         db.execSQL(SqlHelper.getSqlDeleteNoteDataEntries());
         onCreate(db);
         mVersion = newVersion;

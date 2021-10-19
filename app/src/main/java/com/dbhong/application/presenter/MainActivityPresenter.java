@@ -29,7 +29,7 @@ public class MainActivityPresenter implements Contract.MainActivityPresenter {
 
     public MainActivityPresenter(Contract.MainActivtyView view)
     {
-        mNoteDataList = new NoteDataList(this);
+        mNoteDataList = NoteDataList.getInstance();
         this.view = view;
     }
 
@@ -49,7 +49,7 @@ public class MainActivityPresenter implements Contract.MainActivityPresenter {
 
             if(noteData.getNoteTitle().equals(""))
             {
-                noteData.setNoteTitle( "제목 없음 " + (mNoteDataList.size() + 1));
+                noteData.setNoteTitle( "제목 없음 " + (NoteDataList.getInstance().size() + 1));
             }
 
             mNoteDataList.add(noteData);
@@ -116,7 +116,7 @@ public class MainActivityPresenter implements Contract.MainActivityPresenter {
     @Override
     public String getLastEditDate(int position)
     {
-        return mNoteDataList.get(position).getLastEditDate();
+        return NoteDataList.getInstance().get(position).getLastEditDate();
     }
 
     @Override
@@ -144,14 +144,8 @@ public class MainActivityPresenter implements Contract.MainActivityPresenter {
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return mNoteDataList.size();
-    }
-
-    @Override
-    public NoteDataList getNoteDataList() {
-        return mNoteDataList;
     }
 
     @Override
@@ -170,34 +164,66 @@ public class MainActivityPresenter implements Contract.MainActivityPresenter {
 
     }
 
-    public boolean toolbarActionRemove()
-    {
-
-        return view.toolbarActionRemove();
-    }
-
-    public boolean toolBarActionCancle()
+    @Override
+    public boolean toolbarActionRemove(boolean isPositive)
     {
         for(int i = 0; i < mNoteDataList.size(); i++)
         {
-            mNoteDataList.get(i).setIsChecked(false);
-        }
+            if(mNoteDataList.get(i).getIsChecked() == true)
+            {
 
-        return view.toolBarActionCancle();
+            }
+        }
+        return view.toolbarActionRemove();
     }
 
+    @Override
+    public boolean toolBarActionCancle()
+    {
+        for(int i = 0; i < NoteDataList.getInstance().size(); i++)
+        {
+            mNoteDataList.get(i).setIsChecked(false);
+        }
+        view.toolBarActionCancle();
+        return true;
+    }
+
+    @Override
     public boolean toolBarActionCopy()
     {
         return view.toolBarActionCopy();
     }
 
+    @Override
     public boolean toolBarActionSelectAll()
     {
-        for(int i = 0; i < mNoteDataList.size(); i++)
+        if(mNoteDataList.getCheckedItemNum() < mNoteDataList.size())
         {
-            mNoteDataList.get(i).setIsChecked(true);
+            for(int i = 0; i < NoteDataList.getInstance().size(); i++)
+            {
+                mNoteDataList.get(i).setIsChecked(true);
+            }
+            view.toolBarActionSelectAll(true);
+        }
+        else if(mNoteDataList.getCheckedItemNum() == mNoteDataList.size())
+        {
+            for(int i = 0; i < NoteDataList.getInstance().size(); i++)
+            {
+                mNoteDataList.get(i).setIsChecked(false);
+            }
+            view.toolBarActionSelectAll(false);
         }
 
-        return view.toolBarActionSelectAll();
+        return true;
+    }
+
+    @Override
+    public void noteDeleteDialogPositiveClicked() {
+        view.noteDeleteDialogPositiveClicked();
+    }
+
+    @Override
+    public void noteDeleteDialogNegativeClicked() {
+        view.noteDeleteDialogNegativeClicked();
     }
 }
