@@ -13,6 +13,7 @@ import androidx.annotation.LayoutRes;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dbhong.application.model.NoteData;
 import com.dbhong.application.model.NoteDataList;
 import com.dbhong.application.presenter.MainActivityPresenter;
 
@@ -48,7 +49,6 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
         mPresenter = presenter;
         mObjectsFromResources = objsFromResources;
         mFieldId = textViewResourceId;
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -115,10 +115,11 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        if(NoteDataList.getInstance() != null)
+        if(NoteDataList.getInstance() == null)
+            return 0;
+        else {
             return NoteDataList.getInstance().size();
-
-        return 0;
+        }
     }
 
 }

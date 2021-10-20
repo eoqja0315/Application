@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ public class MainActivityPresenter implements Contract.MainActivityPresenter {
     @Override
     public void removeNoteData(int position)
     {
-        if(mNoteDataList != null)
+        if(NoteDataList.getInstance() != null)
             mNoteDataList.remove(position);
     }
 
@@ -68,6 +69,7 @@ public class MainActivityPresenter implements Contract.MainActivityPresenter {
     @Override
     public int loadNoteDataListInDataBase(Context context)
     {
+        Log.e("MainActivityPresenter", "item count 2 : " + getItemCount());
         return mNoteDataList.loadNoteDataListInDataBase(context);
     }
 

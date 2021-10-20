@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,18 +59,12 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Log.d(TAG, "onCreate()");
-
         mPresenter = new MainActivityPresenter(this);
 
         noteListRecyclerView = findViewById(R.id.noteListRecycler);
         noteListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mAdapter = new NoteListAdapter(this, R.layout.activity_main , mPresenter);
-
-        Log.e(TAG, "mAdapter size : " + mAdapter.getItemCount());
-
         noteListRecyclerView.setAdapter(mAdapter);
 
         toolbar = findViewById(R.id.mainToolbar);
@@ -96,11 +89,8 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
 
     public void initialize()
     {
-        Log.e(TAG, "item count before : " + mPresenter.getItemCount());
         if(mPresenter.loadNoteDataListInDataBase(this) > 0)
             mAdapter.notifyDataSetChanged();
-
-        Log.e(TAG, "item count after : " + mPresenter.getItemCount());
 
         menu = toolbar.getMenu();
         menuInflater = getMenuInflater();
@@ -112,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_remove:
                 return toolbarActionRemove();
@@ -160,14 +149,17 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
         {
             onOptionsItemSelected(toolbar.getMenu().findItem(R.id.action_cancle));
         }
-        else
+        else {
+            NoteDataList.getInstance().destroyInstance();
             finish();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.saveNoteDataListInDataBase(this);
+        NoteDataList.getInstance().destroyInstance();
     }
 
     @Override
@@ -177,12 +169,28 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
 
     @Override
     public void setViewNoteListLongClickEvent(int position) {
+        MenuItem menuItemSelectAll = null;
+
         if(mPresenter.getChekedItemNum() > 0) {
-            if(menu.findItem(R.id.action_remove) == null)
+            if((menu.findItem(R.id.action_remove) == null) || (menu.findItem(R.id.action_select_all) == null))
             {
                 menuInflater.inflate(R.menu.main_actionbar_action, menu);
+                menuItemSelectAll = menu.findItem(R.id.action_select_all);
             }
 
+            if(menuItemSelectAll != null)
+            {
+                if(menuItemSelectAll.isChecked())
+                {
+                    menuItemSelectAll.setChecked(true);
+                }
+                else
+                {
+                    menuItemSelectAll.setChecked(false);
+                }
+            }
+
+            toolbar.setTitle(R.string.main_toolbar_title_select_note);
             setVisibilityAllNoteListRecyclerItem(R.id.checkBoxSelect, View.VISIBLE);
             startAnim((NoteListAdapter.ViewHolder) noteListRecyclerView.findViewHolderForAdapterPosition(position), R.id.checkBoxSelect, checkboxClickAnim);
             ((CheckBox) noteListRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.checkBoxSelect)).setChecked(mPresenter.getIsChecked(position));
@@ -193,40 +201,24 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
             removeAllMenuItem();
             setVisibilityAllNoteListRecyclerItem(R.id.checkBoxSelect, View.GONE);
             imageButtonCreateNote.setVisibility(View.VISIBLE);
+            toolbar.setTitle(R.string.main_toolbar_title);
         }
     }
 
     @Override
     public void setViewNoteListClickEvent(int position, int checkedItemNumBeforeCheck) {
-
-        if(mPresenter.getChekedItemNum() == 0)
+        if(menu.findItem(R.id.action_select_all) == null)
         {
-            removeAllMenuItem();
-            setVisibilityAllNoteListRecyclerItem(R.id.checkBoxSelect, View.GONE);
-            imageButtonCreateNote.setVisibility(View.VISIBLE);
-            ((CheckBox)noteListRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.checkBoxSelect)).setChecked(mPresenter.getIsChecked(position));
-        }
-        else if(mPresenter.getChekedItemNum() == 1)
-        {
-            switch (checkedItemNumBeforeCheck)
-            {
-                case 0: // 0 -> 1
-                    Intent intent = new Intent(getApplicationContext(), EditNoteActivity.class);
-                    intent.putExtra("title", mPresenter.getNoteTitle(position));
-                    intent.putExtra("content", mPresenter.getContent(position));
-                    intent.putExtra("position", position);
+            Intent intent = new Intent(getApplicationContext(), EditNoteActivity.class);
+            intent.putExtra("title", mPresenter.getNoteTitle(position));
+            intent.putExtra("content", mPresenter.getContent(position));
+            intent.putExtra("position", position);
 
-                    startActivityResult.launch(intent);
-                    break;
-                case 2: // 2 -> 1
-                    ((CheckBox)noteListRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.checkBoxSelect)).setChecked(mPresenter.getIsChecked(position));
-                    break;
-            }
+            startActivityResult.launch(intent);
         }
         else
         {
             ((CheckBox)noteListRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.checkBoxSelect)).setChecked(mPresenter.getIsChecked(position));
-            //((NoteListAdapter.ViewHolder) noteListRecyclerView.findViewHolderForAdapterPosition(position)).itemView.findViewById(R.id.checkBoxSelect).startAnimation(checkboxClickAnim);
         }
     }
 
@@ -264,26 +256,22 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
                 for(int i = 0; i < mAdapter.getItemCount(); i++)
                 {
                     ((CheckBox) noteListRecyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.checkBoxSelect)).setChecked(mPresenter.getIsChecked(i));
-                    setVisibilityAllNoteListRecyclerItem(R.id.checkBoxSelect, View.GONE);
                 }
+                setVisibilityAllNoteListRecyclerItem(R.id.checkBoxSelect, View.GONE);
             }
         }, 50);
 
-//        for(int i = 0; i < mAdapter.getItemCount(); i++)
-//        {
-//            Log.d(TAG, "mAdapter i : " + i );
-//            noteListRecyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.checkBoxSelect);
-//            ((CheckBox) noteListRecyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.checkBoxSelect)).setChecked(mPresenter.getIsChecked(i));
-//        }
-
         removeAllMenuItem();
         imageButtonCreateNote.setVisibility(View.VISIBLE);
-        //setVisibilityAllNoteListRecyclerItem(R.id.checkBoxSelect, View.GONE);
+        toolbar.setTitle(R.string.main_toolbar_title);
     }
 
     @Override
     public void noteDeleteDialogNegativeClicked() {
-        Toast.makeText(getApplicationContext(), "Push cancle", Toast.LENGTH_SHORT).show();
+        //removeAllMenuItem();
+        //imageButtonCreateNote.setVisibility(View.VISIBLE);
+        //toolbar.setTitle(R.string.main_toolbar_title);
+        //Toast.makeText(getApplicationContext(), "Push cancle", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -299,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements Contract.MainActi
         imageButtonCreateNote.setVisibility(View.VISIBLE);
         setVisibilityAllNoteListRecyclerItem(R.id.checkBoxSelect, View.GONE);
         setCheckAllNoteListRecyclerCheckBox(R.id.checkBoxSelect, false);
-
+        toolbar.setTitle(R.string.main_toolbar_title);
 
         return true;
     }

@@ -26,18 +26,8 @@ public class NoteDataList extends ArrayList<NoteData> {
 
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
-
     public void destroyInstance(){
-        try {
-            this.finalize();
-        }
-        catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        mInstance = null;
     }
 
     public static synchronized NoteDataList getInstance()
@@ -83,7 +73,6 @@ public class NoteDataList extends ArrayList<NoteData> {
 
         for(int i = 0; i < size(); i++)
         {
-            Log.e(TAG, "size() : " + size() + " i : " + i);
             ContentValues values = new ContentValues();
             values.put(DataBaseContract.NoteDataEntry.COLUMN_NAME_NOTE_CREATE_DATE, get(i).getCreateDate());
             values.put(DataBaseContract.NoteDataEntry.COLUMN_NAME_NOTE_TITLE, get(i).getNoteTitle());
@@ -112,12 +101,9 @@ public class NoteDataList extends ArrayList<NoteData> {
                     null
             );
 
-            Log.e(TAG, "size before : " + size());
-
             while(cursor.moveToNext())
             {
                 long itemId = cursor.getLong(cursor.getColumnIndexOrThrow(DataBaseContract.NoteDataEntry._ID));
-                Log.e(TAG, "itemId : " + itemId);
                 String createDate = cursor.getString(cursor.getColumnIndexOrThrow(DataBaseContract.NoteDataEntry.COLUMN_NAME_NOTE_CREATE_DATE));
                 String noteTitle = cursor.getString(cursor.getColumnIndexOrThrow(DataBaseContract.NoteDataEntry.COLUMN_NAME_NOTE_TITLE));
                 String content = cursor.getString(cursor.getColumnIndexOrThrow(DataBaseContract.NoteDataEntry.COLUMN_NAME_NOTE_CONTENT));
@@ -130,8 +116,6 @@ public class NoteDataList extends ArrayList<NoteData> {
         {
             e.printStackTrace();
         }
-
-        Log.e(TAG, "size after : " + size());
 
         return size();
     }

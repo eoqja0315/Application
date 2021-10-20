@@ -8,14 +8,13 @@
     android:orientation="vertical"
     android:background="@color/black">
 
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mainToolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="300dp"
         android:background="@color/black"
         app:titleTextColor="@color/white"
-        >
+        app:titleTextAppearance="@style/Toolbar.TitleText">
 
     </androidx.appcompat.widget.Toolbar>
 
